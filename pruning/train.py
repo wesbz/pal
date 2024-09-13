@@ -25,6 +25,12 @@ logging.basicConfig(
 )
 
 DEVICE = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+SAVE_DIR = SAVE_DIR / "Mk2"
+SAVE_DIR.mkdir(exist_ok=True, parents=True)
+
+"""
+Mk2: lr per ffn_dim
+"""
 
 
 # %% Utils
@@ -245,15 +251,15 @@ def run_grid(
         "nb_data": [2048],
         "batch_size": [None, 32],
         "nb_epochs": [1_000],
-        "lambda_l1": [1e-4, 0],
-        "lr": [1e-2, 1e-3],
+        "lambda_l1": [0],
+        "lr": [1e-1, 6e-2, 3e-2, 1e-2, 6e-3, 3e-3, 1e-3, 6e-4, 3e-4, 1e-4],
         "emb_dim": [2],
         "nb_emb": [3],
-        "ffn_dim": [10],
+        "ffn_dim": [10, 32, 128, 512],
         "ffn_bias": [True],
         "ffn_dropout": [0],
         "activation": ["gelu"],
-        "seed": range(100),
+        "seed": range(10),
         "save_weights": [False],
     }
     all_configs = product(*grid.values())
